@@ -5,15 +5,18 @@
 #vagrant plugin install vagrant-libvirt 
 #vagrant plugin install vagrant-mutate
 
-sudo apt-get remove docker docker-engine
+sudo apt-get remove docker docker-engine docker.io containerd runc
 sudo apt-get install \
     linux-image-extra-$(uname -r) \
     linux-image-extra-virtual
+
+sudo apt-get update
 
 sudo apt-get install \
     apt-transport-https \
     ca-certificates \
     curl \
+    gnupg-agent \
     software-properties-common -y
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -24,7 +27,7 @@ sudo add-apt-repository \
    stable"
 
 sudo apt-get update
-sudo apt-get install docker-ce -y
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 apt-cache madison docker-ce
 
 # Docker-compose install
@@ -49,3 +52,5 @@ sudo docker pull rancher/agent:v1.0.2
 ## Config for the ElasticSearch
 echo "vm.max_map_count=262144" >> /etc/sysctl.conf
 sysctl -w vm.max_map_count=262144
+
+sudo usermod -aG docker vagrant
